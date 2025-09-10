@@ -1,0 +1,44 @@
+﻿@page
+@model MyEcommerceApp.Pages.Categories.IndexModel
+@{
+}
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Category List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-page="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>Create New Category
+            </a>
+        </div>
+    </div>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                Category Name
+            </th>
+            <th>
+                Display Order
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model.objCategoryList)
+        {
+           <tr>
+               <td>
+                   @obj.Name
+               </td>
+               <th>
+                   @obj.DisplayOrder
+               </th>
+           </tr> 
+        }
+    </tbody>
+    
+</table>
+</div>
