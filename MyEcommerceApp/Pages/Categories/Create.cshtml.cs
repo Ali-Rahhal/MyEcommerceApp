@@ -15,7 +15,7 @@ namespace MyEcommerceApp.Pages.Categories
         }
 
         [BindProperty]
-        public Category objCategory { get; set; }
+        public Category NewCategory { get; set; }
 
         public void OnGet()
         {
@@ -23,15 +23,16 @@ namespace MyEcommerceApp.Pages.Categories
 
         public IActionResult OnPost()
         {
-            if (objCategory.Name == objCategory.DisplayOrder.ToString())
+            if (NewCategory.Name == NewCategory.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("", "The Display Order cannot exactly match the Name.");
             }
 
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(objCategory);
+                _context.Categories.Add(NewCategory);
                 _context.SaveChanges();
+                TempData["success"] = "Category created successfully";
                 return RedirectToPage("Index");
             }
             return Page();

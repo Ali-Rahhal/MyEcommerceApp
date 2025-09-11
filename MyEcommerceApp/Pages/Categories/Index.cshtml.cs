@@ -13,11 +13,11 @@ namespace MyEcommerceApp.Pages.Categories
             _context = context;
         }
 
-        public List<Category> objCategoryList { get; set; }
+        public List<Category> CategoryList { get; set; }
 
         public void OnGet()
         {
-            objCategoryList = _context.Categories.ToList();
+            CategoryList = _context.Categories.ToList();
         }
     }
 }
