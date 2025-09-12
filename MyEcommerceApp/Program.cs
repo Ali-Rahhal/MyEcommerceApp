@@ -1,12 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using ECApp.DataAccess.Data;
+using ECApp.DataAccess.Repository.IRepository;
+using ECApp.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AddAreaPageRoute("Customer", "/Index", "");
+    });//adding support for razor pages and !!!Areas folder in project!!!
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

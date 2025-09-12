@@ -3,20 +3,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ECApp.DataAccess.Data;
 using ECApp.Models;
+using ECApp.DataAccess.Repository.IRepository;
 
-namespace MyEcommerceApp.Pages.Categories
+namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
     public class EditModel : PageModel
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EditModel(AppDbContext context)
+        public EditModel(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
-        public Category CategoryForUpdate { get; set; }
+        public Category? CategoryForUpdate { get; set; }
 
         public IActionResult OnGet(int? id)
         {
@@ -25,7 +26,7 @@ namespace MyEcommerceApp.Pages.Categories
                 return NotFound();
             }
 
-            CategoryForUpdate = _context.Categories.Find(id);
+            CategoryForUpdate = _unitOfWork.Category.Get(o => o.Id == id);
 
             if (CategoryForUpdate == null)
             {
@@ -37,6 +38,11 @@ namespace MyEcommerceApp.Pages.Categories
 
         public IActionResult OnPost()
         {
+            if (CategoryForUpdate == null)
+            {
+                return NotFound();
+            }
+
             if (CategoryForUpdate.Name == CategoryForUpdate.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("", "The Display Order cannot exactly match the Name.");
@@ -44,8 +50,8 @@ namespace MyEcommerceApp.Pages.Categories
 
             if (ModelState.IsValid)
             {
-                _context.Categories.Update(CategoryForUpdate);
-                _context.SaveChanges();
+                _unitOfWork.Category.Update(CategoryForUpdate);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToPage("Index");
             }

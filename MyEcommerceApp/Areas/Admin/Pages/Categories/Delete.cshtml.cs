@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ECApp.DataAccess.Data;
 using ECApp.Models;
+using ECApp.DataAccess.Repository.IRepository;
 
-namespace MyEcommerceApp.Pages.Categories
+namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
     public class DeleteModel : PageModel
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteModel(AppDbContext context)
+        public DeleteModel(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
-        public Category CategoryForDelete { get; set; }
+        public Category? CategoryForDelete { get; set; }
 
         public IActionResult OnGet(int? id)
         {
@@ -25,23 +24,23 @@ namespace MyEcommerceApp.Pages.Categories
                 return NotFound();
             }
 
-            var category = _context.Categories.FirstOrDefault(m => m.Id == id);
+            CategoryForDelete = _unitOfWork.Category.Get(o => o.Id == id);
 
-            if (category == null)
+            if (CategoryForDelete == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                CategoryForDelete = category;
             }
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            _context.Categories.Remove(CategoryForDelete);
-            _context.SaveChanges();
+            if (CategoryForDelete == null)
+            {
+                return NotFound();
+            }
+            _unitOfWork.Category.Remove(CategoryForDelete);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToPage("Index");
         }

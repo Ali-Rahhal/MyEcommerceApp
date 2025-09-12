@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ECApp.DataAccess.Data;
 using ECApp.Models;
+using ECApp.DataAccess.Repository.IRepository;
 
-namespace MyEcommerceApp.Pages.Categories
+namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
     public class CreateModel : PageModel
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateModel(AppDbContext context)
+        public CreateModel(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
@@ -30,8 +30,8 @@ namespace MyEcommerceApp.Pages.Categories
 
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(NewCategory);
-                _context.SaveChanges();
+                _unitOfWork.Category.Add(NewCategory);
+                _unitOfWork.Save();
                 TempData["success"] = "Category created successfully";
                 return RedirectToPage("Index");
             }
