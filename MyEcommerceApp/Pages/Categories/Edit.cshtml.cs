@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using MyEcommerceApp.Data;
-using MyEcommerceApp.Models;
+using ECApp.DataAccess.Data;
+using ECApp.Models;
 
 namespace MyEcommerceApp.Pages.Categories
 {
@@ -16,7 +16,7 @@ namespace MyEcommerceApp.Pages.Categories
         }
 
         [BindProperty]
-        public Category? CategoryForUpdate { get; set; }
+        public Category CategoryForUpdate { get; set; }
 
         public IActionResult OnGet(int? id)
         {

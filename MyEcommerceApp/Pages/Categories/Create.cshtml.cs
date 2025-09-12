@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyEcommerceApp.Data;
-using MyEcommerceApp.Models;
+using ECApp.DataAccess.Data;
+using ECApp.Models;
 
 namespace MyEcommerceApp.Pages.Categories
 {
