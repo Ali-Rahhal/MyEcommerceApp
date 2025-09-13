@@ -1,0 +1,64 @@
+﻿@page
+@model MyEcommerceApp.Areas.Admin.Pages.Products.DeleteModel
+@{
+}
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">
+                    Delete Product
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            <div class="border p-3 mt-4">
+                <input type="hidden" asp-for="ProductForDelete.Id" />
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Title" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Title" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Description" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Description" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.ISBN" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.ISBN" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Author" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Author" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.ListPrice" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.ListPrice" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Price" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Price" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Price50" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Price50" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductForDelete.Price100" disabled class="form-control border-0 shadow" />
+                    <label asp-for="ProductForDelete.Price100" class="ms-2"></label>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-danger form-control">Delete</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-page="Index" class="btn btn-secondary form-control">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

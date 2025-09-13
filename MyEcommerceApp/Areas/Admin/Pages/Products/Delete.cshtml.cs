@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using ECApp.Models;
 using ECApp.DataAccess.Repository.IRepository;
+using ECApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MyEcommerceApp.Areas.Admin.Pages.Categories
+namespace MyEcommerceApp.Areas.Admin.Pages.Products
 {
     public class DeleteModel : PageModel
     {
@@ -14,7 +14,8 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Categories
             _unitOfWork = unitOfWork;
         }
 
-        public Category? CategoryForDelete { get; set; }
+        [BindProperty]
+        public Product? ProductForDelete { get; set; }
 
         public IActionResult OnGet(int? id)
         {
@@ -23,9 +24,9 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Categories
                 return NotFound();
             }
 
-            CategoryForDelete = _unitOfWork.Category.Get(o => o.Id == id);
+            ProductForDelete = _unitOfWork.Product.Get(o => o.Id == id);
 
-            if (CategoryForDelete == null)
+            if (ProductForDelete == null)
             {
                 return NotFound();
             }
@@ -34,13 +35,13 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 
         public IActionResult OnPost()
         {
-            if (CategoryForDelete == null)
+            if (ProductForDelete == null)
             {
                 return NotFound();
             }
-            _unitOfWork.Category.Remove(CategoryForDelete);
+            _unitOfWork.Product.Remove(ProductForDelete);
             _unitOfWork.Save();
-            TempData["success"] = "Category deleted successfully";
+            TempData["success"] = "Product deleted successfully";
             return RedirectToPage("Index");
         }
     }
