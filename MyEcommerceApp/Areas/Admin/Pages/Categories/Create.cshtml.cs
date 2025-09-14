@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ECApp.Models;
 using ECApp.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using ECApp.Utility;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class CreateModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

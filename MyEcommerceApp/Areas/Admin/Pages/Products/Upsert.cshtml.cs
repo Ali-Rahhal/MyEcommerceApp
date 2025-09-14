@@ -1,12 +1,15 @@
 using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Models.ViewModels;
+using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Products
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class UpsertModel : PageModel //Upsert : Update + Insert
     {
         private readonly IUnitOfWork _unitOfWork;

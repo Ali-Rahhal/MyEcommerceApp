@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
-using ECApp.DataAccess.Repository.IRepository;
+using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class DeleteModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -1,8 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using ECApp.DataAccess.Data;
-using ECApp.DataAccess.Repository.IRepository;
 using ECApp.DataAccess.Repository;
+using ECApp.DataAccess.Repository.IRepository;
+using ECApp.Models;
+using ECApp.Utility;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +19,21 @@ builder.Services.AddRazorPages()
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+//builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();//original line
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()//use AddIdentity to add roles
+    .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();//AddDefaultTokenProviders is used because unlike
+                                                                         //AddDefaultIdentity, AddIdentity does not add token providers by default
+
+//adding the correct paths for login, logout and access denied//should be done after adding identity
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

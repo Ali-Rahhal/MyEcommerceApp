@@ -1,9 +1,12 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using ECApp.Models;
 using ECApp.DataAccess.Repository.IRepository;
+using ECApp.Models;
+using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

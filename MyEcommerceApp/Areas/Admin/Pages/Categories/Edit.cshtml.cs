@@ -1,12 +1,15 @@
+using ECApp.DataAccess.Data;
+using ECApp.DataAccess.Repository.IRepository;
+using ECApp.Models;
+using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ECApp.DataAccess.Data;
-using ECApp.Models;
-using ECApp.DataAccess.Repository.IRepository;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Categories
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class EditModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
