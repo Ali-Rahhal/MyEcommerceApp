@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ECApp.Models;
+﻿using ECApp.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECApp.DataAccess.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser> // Inherit from IdentityDbContext to include Identity tables
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -11,9 +13,12 @@ namespace ECApp.DataAccess.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; } // DbSet for ApplicationUser
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Ensure Identity configurations are applied
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Action", DisplayOrder = 11 },
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 22 },
