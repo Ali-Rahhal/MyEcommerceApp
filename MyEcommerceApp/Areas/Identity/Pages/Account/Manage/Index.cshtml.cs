@@ -7,6 +7,7 @@ using ECApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Mono.TextTemplating;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -71,6 +72,7 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account.Manage
             public string? City { get; set; }
             public string? State { get; set; }
             public string? PostalCode { get; set; }
+            public string? CompanyName { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -78,7 +80,7 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var id = await _userManager.GetUserIdAsync(user);
-            var userFromDb = _db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+            var userFromDb = _db.ApplicationUsers.Where(u => u.Id == id).Include(u => u.Company).FirstOrDefault();
             Username = userName;
 
             Input = new InputModel
@@ -90,6 +92,10 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account.Manage
                 State = userFromDb.State,
                 PostalCode = userFromDb.PostalCode
             };
+            if (userFromDb.Company != null)
+            {
+                Input.CompanyName = userFromDb.Company.Name;
+            }
         }
 
         public async Task<IActionResult> OnGetAsync()

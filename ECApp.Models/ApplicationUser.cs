@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +19,10 @@ namespace ECApp.Models
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
+        public int? CompanyId { get; set; }// Foreign key property: Nullable to allow users without a company
+
+        [ForeignKey("CompanyId")]
+        [ValidateNever]
+        public Company Company { get; set; }// Navigation property: Each user can be associated with one company
     }
 }

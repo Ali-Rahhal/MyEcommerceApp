@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -34,6 +35,7 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,7 +43,8 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
             RoleManager<IdentityRole> roleManager,//to add roles
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +53,7 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -118,6 +122,10 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
             public string? State { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
+            public int? CompanyId { get; set; }
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -139,6 +147,11 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
                 {
                     Text = r.Name,
                     Value = r.Name
+                }),
+                CompanyList = _unitOfWork.Company.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
                 })
             };
 
@@ -162,6 +175,11 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
                 user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
+
+                if (Input.Role == SD.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

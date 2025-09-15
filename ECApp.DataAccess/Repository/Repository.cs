@@ -40,7 +40,7 @@ namespace ECApp.DataAccess.Repository
                 }
             }
             return query.FirstOrDefault();
-            //3 statements above same as return dbSet.Where(filter).FirstOrDefault();
+            //4 statements above same as return dbSet.Where(filter).Include(u => u.includeProp).//otherInclusions//.FirstOrDefault();
         }
 
         public IEnumerable<T> GetAll(string? includeProperties = null)//includeProperties is for including data like the Category var in Product class(like the Get method above)
