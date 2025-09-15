@@ -4,6 +4,7 @@ using ECApp.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECApp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250915085445_addedCompanyTable")]
+    partial class addedCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,48 +101,6 @@ namespace ECApp.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Techville",
-                            Name = "Tech Solutions",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
-                            State = "TS",
-                            StreetAddress = "123 Tech Lane"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Businesstown",
-                            Name = "Business Corp",
-                            PhoneNumber = "987-654-3210",
-                            PostalCode = "67890",
-                            State = "BC",
-                            StreetAddress = "456 Business Rd"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Enterprisecity",
-                            Name = "Enterprise Inc",
-                            PhoneNumber = "555-555-5555",
-                            PostalCode = "11223",
-                            State = "EI",
-                            StreetAddress = "789 Enterprise Ave"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            City = "Globaltown",
-                            Name = "Global Industries",
-                            PhoneNumber = "444-444-4444",
-                            PostalCode = "44556",
-                            State = "GI",
-                            StreetAddress = "101 Global St"
-                        });
                 });
 
             modelBuilder.Entity("ECApp.Models.Product", b =>

@@ -13,6 +13,7 @@ namespace ECApp.DataAccess.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; } // DbSet for ApplicationUser
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +25,50 @@ namespace ECApp.DataAccess.Data
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 22 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 33 }
             );
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    Id = 1,
+                    Name = "Tech Solutions",
+                    StreetAddress = "123 Tech Lane",
+                    City = "Techville",
+                    State = "TS",
+                    PostalCode = "12345",
+                    PhoneNumber = "123-456-7890"
+                },
+                new Company
+                {
+                    Id = 2,
+                    Name = "Business Corp",
+                    StreetAddress = "456 Business Rd",
+                    City = "Businesstown",
+                    State = "BC",
+                    PostalCode = "67890",
+                    PhoneNumber = "987-654-3210"
+                },
+                new Company
+                {
+                    Id = 3,
+                    Name = "Enterprise Inc",
+                    StreetAddress = "789 Enterprise Ave",
+                    City = "Enterprisecity",
+                    State = "EI",
+                    PostalCode = "11223",
+                    PhoneNumber = "555-555-5555"
+                },
+                new Company
+                {
+                    Id = 4,
+                    Name = "Global Industries",
+                    StreetAddress = "101 Global St",
+                    City = "Globaltown",
+                    State = "GI",
+                    PostalCode = "44556",
+                    PhoneNumber = "444-444-4444"
+                }
+            );
+
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {

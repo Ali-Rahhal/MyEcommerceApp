@@ -46,11 +46,11 @@ namespace ECApp.Models
         [DisplayName("Price for 100+")]
         public double Price100 { get; set; }
 
-        public int CategoryId { get; set; }
+        public int CategoryId { get; set; }//foreign key property: to establish relationship with Category table
 
         [ForeignKey("CategoryId")]
         [ValidateNever]
-        public Category Category { get; set; }
+        public Category Category { get; set; }//navigation property: to access related data
 
         [ValidateNever]
         public string? ImageUrl { get; set; }

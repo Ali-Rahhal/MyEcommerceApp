@@ -2,15 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using ECApp.DataAccess.Data;
 using ECApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mono.TextTemplating;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace MyEcommerceApp.Areas.Identity.Pages.Account.Manage
 {
@@ -127,6 +128,15 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+            var UserId = await _userManager.GetUserIdAsync(user);
+            var AppUser = _db.ApplicationUsers.FirstOrDefault(u => u.Id == UserId);
+
+            AppUser.Name = Input.Name;
+            AppUser.StreetAddress = Input.StreetAddress;
+            AppUser.City = Input.City;
+            AppUser.State = Input.State;
+            AppUser.PostalCode = Input.PostalCode;
+            _db.SaveChanges();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
