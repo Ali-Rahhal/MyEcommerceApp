@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ECApp.DataAccess.Repository
 {
@@ -26,9 +27,19 @@ namespace ECApp.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)//includeProperties is for including data like the Category var in Product class
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)//includeProperties is for including data like the Category var in Product class
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = dbSet;
+            }
+            else
+            {
+                query = dbSet.AsNoTracking();//AsNoTracking() means we are not tracking changes to the entities retrieved
+                                             //from the database. This is useful for read-only scenarios where you don't intend to modify the entities.
+            }
+
             query = query.Where(filter);
             //include properties will be comma separated like "Category,CategoryId" if we want to include multiple properties
             if (!string.IsNullOrEmpty(includeProperties))
@@ -43,9 +54,14 @@ namespace ECApp.DataAccess.Repository
             //4 statements above same as return dbSet.Where(filter).Include(u => u.includeProp).//otherInclusions//.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)//includeProperties is for including data like the Category var in Product class(like the Get method above)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)//includeProperties is for including data like the Category var in Product class(like the Get method above)
         {
             IQueryable<T> query = dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties

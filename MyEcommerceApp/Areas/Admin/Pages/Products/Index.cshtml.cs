@@ -27,7 +27,7 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Products
         //API CALLS for getting all products in Json format for DataTables
         public JsonResult OnGetAll()//The route is /Admin/Products/Index?handler=All
         {
-            var productList = _unitOfWork.Product.GetAll("Category").ToList();//Include Category data using eager loading
+            var productList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();//Include Category data using eager loading
             return new JsonResult(new { data = productList });//We return JsonResult because we will call this method using AJAX
         }
 
