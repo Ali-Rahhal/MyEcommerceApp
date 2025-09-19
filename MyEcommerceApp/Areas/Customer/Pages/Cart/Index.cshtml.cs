@@ -32,11 +32,12 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(s => s.ApplicationUserId == userId,
                 includeProperties: "Product"),
+                OrderHeader = new()
             };
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
-                cart.Price = GetPriceBaseOnQuantity(cart);
-                ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                cart.Price = GetPriceBasedOnQuantity(cart);
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
         }
 
@@ -73,7 +74,7 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
             return RedirectToPage("Index");
         }
 
-        private double GetPriceBaseOnQuantity(ShoppingCart shoppingCart)
+        private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
         {
             if (shoppingCart.Count <= 50)
             {
