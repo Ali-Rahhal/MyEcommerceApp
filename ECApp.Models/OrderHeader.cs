@@ -13,6 +13,7 @@ namespace ECApp.Models
     {
         public int Id { get; set; }
 
+        [ValidateNever]
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
@@ -30,6 +31,7 @@ namespace ECApp.Models
         public DateTime PaymentDate { get; set; }
         public DateOnly PaymentDueDate { get; set; }
 
+        public string? SessionId { get; set; }
         public string? PaymentIntentId { get; set; }
 
         [Required]
