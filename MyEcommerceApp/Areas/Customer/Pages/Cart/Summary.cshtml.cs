@@ -2,6 +2,7 @@ using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Models.ViewModels;
 using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Stripe.Checkout;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace MyEcommerceApp.Areas.Customer.Pages.Cart
 {
+    [Authorize]
     public class SummaryModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

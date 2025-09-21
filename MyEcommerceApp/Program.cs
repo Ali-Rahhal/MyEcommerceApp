@@ -34,6 +34,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddDistributedMemoryCache();//to store session in memory
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);//how long the session will be stored in memory
+    options.Cookie.HttpOnly = true;//to prevent client side script from accessing the cookie
+    options.Cookie.IsEssential = true;//the cookie will be sent even if the user has not consented to non-essential cookies
+});
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 var app = builder.Build();
@@ -55,6 +63,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();//should be added after UseRouting and before MapRazorPages
 
 app.MapRazorPages();
 

@@ -1,12 +1,14 @@
 using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Stripe.Checkout;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 {
+    [Authorize]
     public class OrderConfirmationModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

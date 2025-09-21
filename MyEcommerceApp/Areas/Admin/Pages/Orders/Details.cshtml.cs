@@ -33,9 +33,13 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 
         }
 
-        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult OnPostUpdateOrderDetail()
         {
+            if (!IsAdminOrEmployee())
+            {
+                return Forbid();
+            }
+
             var orderHeaderFromDb = _unitOfWork.OrderHeader.Get(u => u.Id == orderVM.OrderHeader.Id);
 
             orderHeaderFromDb.Name = orderVM.OrderHeader.Name;
@@ -60,18 +64,26 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Orders
             return RedirectToPage("Details", new { orderId = orderHeaderFromDb.Id });
         }
 
-        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult OnPostStartProcessing()
         {
+            if (!IsAdminOrEmployee())
+            {
+                return Forbid();
+            }
+
             _unitOfWork.OrderHeader.UpdateStatus(orderVM.OrderHeader.Id, SD.StatusInProcess);
             _unitOfWork.Save();
             TempData["success"] = "Order is now In Process.";
             return RedirectToPage("Details", new { orderId = orderVM.OrderHeader.Id });
         }
 
-        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult OnPostShipOrder()
         {
+            if (!IsAdminOrEmployee())
+            {
+                return Forbid();
+            }
+
             var orderHeaderFromDb = _unitOfWork.OrderHeader.Get(u => u.Id == orderVM.OrderHeader.Id);
 
             orderHeaderFromDb.TrackingNumber = orderVM.OrderHeader.TrackingNumber;
@@ -94,6 +106,11 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Orders
         [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         public IActionResult OnPostCancelOrder()
         {
+            if (!IsAdminOrEmployee())
+            {
+                return Forbid();
+            }
+                
             var orderHeaderFromDb = _unitOfWork.OrderHeader.Get(u => u.Id == orderVM.OrderHeader.Id);
 
             if (orderHeaderFromDb.PaymentStatus == SD.PaymentStatusApproved)
@@ -162,6 +179,12 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 
             Response.Headers.Add("Location", session.Url);// We add the session.Url to the response header so that we can redirect the user to the Stripe checkout page
             return new StatusCodeResult(303);// This is a redirect status code
+        }
+
+        //
+        private bool IsAdminOrEmployee()
+        {
+            return User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee);
         }
 
     }

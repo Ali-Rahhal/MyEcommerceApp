@@ -1,12 +1,14 @@
 using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

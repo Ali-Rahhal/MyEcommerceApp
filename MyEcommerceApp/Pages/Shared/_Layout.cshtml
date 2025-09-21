@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor /* to access http context inside layout */
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -58,7 +61,8 @@
                         }
                         <li class="nav-item">
                             <a class="nav-link " asp-area="Customer" asp-page="/Cart/Index">
-                                <i class="bi bi-cart"></i> &nbsp;   
+                                <!-- rendering a View Component called ShoppingCart asynchronously.-->
+                                @await Component.InvokeAsync("ShoppingCart")
                             </a>
                         </li>
                     </ul>

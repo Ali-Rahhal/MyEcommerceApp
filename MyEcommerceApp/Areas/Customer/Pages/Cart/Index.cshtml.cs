@@ -1,6 +1,7 @@
 using ECApp.DataAccess.Repository.IRepository;
 using ECApp.Models;
 using ECApp.Models.ViewModels;
+using ECApp.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -55,14 +56,21 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
             var cart = _unitOfWork.ShoppingCart.Get(s => s.Id == id);
             if (cart.Count <= 1)
             {
+                // remove the item from cart
                 _unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.Save();
+                // update the session after removing the item
+                int cartCountAfterRemoving = _unitOfWork.ShoppingCart
+                    .GetAll(s => s.ApplicationUserId == cart.ApplicationUserId).Count();
+                HttpContext.Session.SetInt32(SD.SessionCart, cartCountAfterRemoving);
             }
             else
             {
+                // reduce the count by 1
                 cart.Count -= 1;
                 _unitOfWork.ShoppingCart.Update(cart);
+                _unitOfWork.Save();
             }
-            _unitOfWork.Save();
             return RedirectToPage("Index");
         }
 
@@ -71,6 +79,10 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
             var cart = _unitOfWork.ShoppingCart.Get(s => s.Id == id);
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
+            // update the session after removing the item
+            int cartCountAfterRemoving = _unitOfWork.ShoppingCart
+                .GetAll(s => s.ApplicationUserId == cart.ApplicationUserId).Count();
+            HttpContext.Session.SetInt32(SD.SessionCart, cartCountAfterRemoving);
             return RedirectToPage("Index");
         }
 
