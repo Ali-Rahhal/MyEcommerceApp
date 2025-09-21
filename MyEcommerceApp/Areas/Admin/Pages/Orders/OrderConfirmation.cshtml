@@ -1,0 +1,17 @@
+﻿@page
+@model MyEcommerceApp.Areas.Admin.Pages.Orders.OrderConfirmationModel
+@{
+}
+
+<div class="container row pt-4">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">Payment Successful!</h1>
+        Order Number is : @Model.Id <br /><br />
+        <img src="~/images/lawn_leaf.jpg" width="65%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Payment has been applied successfully! <br />
+        <a asp-page="Details" asp-route-orderId="@Model.Id" class="btn btn-primary">Back to Order Details</a>
+    </div>
+</div>

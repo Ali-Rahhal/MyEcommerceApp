@@ -1,7 +1,6 @@
 using ECApp.DataAccess.Data;
 using ECApp.DataAccess.Repository;
 using ECApp.DataAccess.Repository.IRepository;
-using ECApp.Models;
 using ECApp.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -50,7 +49,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-StripeConfiguration.ApiKey= builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();//setting the api key for stripe
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();//setting the api key for stripe
 
 app.UseRouting();
 

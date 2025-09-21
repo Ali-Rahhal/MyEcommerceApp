@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Stripe.Checkout;
 
-namespace MyEcommerceApp.Areas.Customer.Pages.Cart
+namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 {
     public class OrderConfirmationModel : PageModel
     {
@@ -17,32 +17,25 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
 
         public int Id { get; set; }
 
-        public void OnGet(int id)
+        public void OnGet(int orderHeaderId)
         {
-            Id = id;
+            Id = orderHeaderId;
 
-            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
-            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == orderHeaderId);
+            if (orderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment)
             {
-                //This is an order by a customer
+                //This is an order by a company
 
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);// We get the session from Stripe
 
                 if (session.PaymentStatus.ToLower() == "paid")// If the payment is successful
                 {
-                    _unitOfWork.OrderHeader.UpdateStripePaymentId(id, session.Id, session.PaymentIntentId);
-                    _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.OrderHeader.UpdateStripePaymentId(orderHeaderId, session.Id, session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(orderHeaderId, orderHeader.OrderStatus, SD.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
             }
-
-            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
-                .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
-
-            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-            _unitOfWork.Save();
-
         }
     }
 }

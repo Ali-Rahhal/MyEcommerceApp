@@ -1,8 +1,10 @@
 ﻿//code needed for datatable to work in order index page
 var dataTable;
 
+//this function will be called when the document is ready.
 $(document).ready(function () {
-    var url = window.location.search;
+    var url = window.location.search;//get the query string from the url.
+    
     if (url.includes("inprocess")) {
         loadDataTable("inprocess");
     }
@@ -32,7 +34,7 @@ function loadDataTable(status) {
             { data: 'orderTotal', "width": "10%" },
             {
                 data: 'id',
-                "render": function (data) {//this is to render the edit and delete buttons in the last column.
+                "render": function (data) {//this is to render the edit button in the last column.
                     return `<div class="w-75 btn-group" role="group">
                     <a href="/Admin/Orders/Details?orderId=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
                     </div>`//using `` for multi-line string and ${} for variable interpolation.

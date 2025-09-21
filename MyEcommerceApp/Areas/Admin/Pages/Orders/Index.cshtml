@@ -1,13 +1,14 @@
 ﻿@page
 @model MyEcommerceApp.Areas.Admin.Pages.Orders.IndexModel
 @{
+    // 
     var status = Model.Status;
     var pending = "text-primary";
     var inprocess = "text-primary";
     var completed = "text-primary";
     var approved = "text-primary";
     var all = "text-primary";
-
+    // Highlight the active status filter
     switch (status)
     {
         case "pending":

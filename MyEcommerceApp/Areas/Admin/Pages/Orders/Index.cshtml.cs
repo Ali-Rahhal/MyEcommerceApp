@@ -3,6 +3,7 @@ using ECApp.Models;
 using ECApp.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace MyEcommerceApp.Areas.Admin.Pages.Orders
 {
@@ -21,11 +22,25 @@ namespace MyEcommerceApp.Areas.Admin.Pages.Orders
             Status = status;
         }
 
-        public JsonResult OnGetAll(string status)//The route is /Admin/Order/Index?handler=All
+        public JsonResult OnGetAll(string status)//The route is /Admin/Orders/Index?handler=All
         {
-            IEnumerable<OrderHeader> orderHeaderList = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();//Include Category data using eager loading
+            IEnumerable<OrderHeader> orderHeaderList;
 
-            switch (status)
+            //We will show all the orders to admin and employee but only the orders of the logged in user to customer
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                orderHeaderList = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                orderHeaderList = _unitOfWork.OrderHeader
+                    .GetAll(u => u.ApplicationUserId == userId, includeProperties: "ApplicationUser").ToList();
+            }
+
+            switch (status)//We will filter the orders based on the status
             {
                 case "pending":
                     orderHeaderList = orderHeaderList.Where(u => u.PaymentStatus == SD.PaymentStatusPending).ToList();
