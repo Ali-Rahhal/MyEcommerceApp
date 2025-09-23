@@ -38,8 +38,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddAuthentication().AddFacebook(options =>
 {
     //get these two values from facebook developer account
-    options.AppId = "3731515090485682";
-    options.AppSecret = "6d37b14de9f8fcdebed0ef909c4a92fe";
+    options.AppId = builder.Configuration["Facebook:AppId"] ?? "";//if null, set to empty string
+    options.AppSecret = builder.Configuration["Facebook:AppSecret"] ?? "";
     //this is used to handle errors during external authentication such as when the user cancels the login
     options.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
     {
