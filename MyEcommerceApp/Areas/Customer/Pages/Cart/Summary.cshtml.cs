@@ -143,7 +143,7 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
                 Response.Headers.Add("Location", session.Url);// We add the session.Url to the response header so that we can redirect the user to the Stripe checkout page
                 return new StatusCodeResult(303);// This is a redirect status code
             }
-
+            //only company accounts reach this point
             return RedirectToPage("OrderConfirmation", new { id = ShoppingCartVM.OrderHeader.Id });
         }
 

@@ -39,12 +39,14 @@ namespace MyEcommerceApp.Areas.Customer.Pages.Cart
                 }
             }
 
+            //Remove the shopping cart items for this user as the order is completed
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
                 .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
 
+            HttpContext.Session.Clear();// We clear the session as the order is completed
         }
     }
 }

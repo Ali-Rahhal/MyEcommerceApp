@@ -214,7 +214,15 @@ namespace MyEcommerceApp.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //if an admin is creating a new user, they don't want to be signed in as that user
+                        if (User.IsInRole(SD.Role_Admin))
+                        {
+                            TempData["success"] = "New user created successfully";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
