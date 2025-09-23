@@ -34,6 +34,26 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+//adding support for external authentication using facebook
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    //get these two values from facebook developer account
+    options.AppId = "3731515090485682";
+    options.AppSecret = "6d37b14de9f8fcdebed0ef909c4a92fe";
+    //this is used to handle errors during external authentication such as when the user cancels the login
+    options.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
+    {
+        OnRemoteFailure = ctx =>
+        {
+            var externalError = Uri.EscapeDataString("An error occurred during Facebook login. Please try again.");
+            ctx.Response.Redirect($"/Identity/Account/Login?ExternalError={externalError}");
+            ctx.HandleResponse();
+            return Task.CompletedTask;
+        }
+    };
+
+});
+
 builder.Services.AddDistributedMemoryCache();//to store session in memory
 builder.Services.AddSession(options =>
 {
